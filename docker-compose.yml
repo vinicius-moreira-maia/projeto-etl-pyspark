@@ -1,0 +1,27 @@
+# 'rw' define que o volume é de 'read and write'
+# 'pgdatabase' e 'pgadmin' são os 2 serviços
+# ambos aqui já farão parte da mesma rede, eliminando a necessidade de criar uma 'docker network'
+# 'docker compose up' / 'docker compose down'
+# 'docker compose up -d' 
+
+services:
+  pgdatabase:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=taxi_data
+    volumes:
+      - "./pgs_data_volume:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    volumes:
+      - "./pgs_data_volume:/var/lib/postgresql/data:rw"
+    ports:
+      - "5000:80"
+
