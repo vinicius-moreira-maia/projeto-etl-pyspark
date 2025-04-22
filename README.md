@@ -121,7 +121,8 @@ Configuração dos serviços PostgreSQL e PgAdmin com persistência de dados em 
 PgAdmin implantado.
 ![PgAdmin](imgs/image.png)
 
-O host do banco de dados é o nome do serviço definido no arquivo `docker-compose.yml`.
+O host do banco de dados é o nome do serviço definido no arquivo `docker-compose.yml` apenas para o PgAdmin, pois estão na mesma rede do docker.
+Para o script/job o host é o localhost.
 ![Host do banco de dados](imgs/image-1.png)
 
 ### **4. Arquivo etl_script.py**
