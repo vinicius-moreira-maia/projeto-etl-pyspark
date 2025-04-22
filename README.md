@@ -108,6 +108,7 @@ echo "cluster encerrado"
 ```
 
 Output do script de parada.
+
 ![Saída do script de parada](imgs/image-5.png)
 
 ### **3. Arquivo docker-compose.yml**
