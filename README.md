@@ -42,14 +42,15 @@ Dataset: [https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page](https://
 
 ### Pré-requisitos
 
-Foi necessário instalar o Java (11.0.2) e o Apache Spark (3.3.2), além de configurar as variáveis de ambiente no arquivo `.bashrc`. 
+Foi necessário instalar o Java (11.0.2) e o Apache Spark (3.3.2), além de configurar as variáveis de ambiente no arquivo `.bashrc`.
+Este arquivo está presente na pasta raiz de usuários do Ubuntu e contém instruções a serem executadas quando o terminal é aberto. Isto poderia ser feito no escopo deste projeto mas optou-se por essa abordagem por ser algo mais automatizado. 
+
+![Variáveis de Ambiente](imgs/envvars.jpg)
 
 Também foi feito o download do driver JDBC do PostgreSQL, compatível com a versão do Java, disponível em:  
 [https://jdbc.postgresql.org/download/](https://jdbc.postgresql.org/download/)
 
 O driver foi colocado na pasta `jars` do Spark.
-
-![Variáveis de Ambiente](imgs/envvars.jpg)
 
 ---
 
