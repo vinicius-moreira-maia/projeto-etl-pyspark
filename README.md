@@ -24,6 +24,8 @@
 
 Este projeto implementa um pipeline ETL (Extract, Transform, Load) utilizando PySpark para processar dados de táxis de Nova York. Os dados são baixados de uma fonte remota, processados em um cluster Spark local e carregados em um banco de dados PostgreSQL.
 
+Dataset: [https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
+
 ---
 
 ## Ferramentas Utilizadas
