@@ -121,9 +121,6 @@ PgAdmin implantado.
 O host do banco de dados é o nome do serviço definido no arquivo `docker-compose.yml`.
 ![Host do banco de dados](imgs/image-1.png)
 
-Nome do serviço no arquivo `docker-compose.yml`.
-![Nome do serviço](imgs/image-2.png)
-
 ### **4. Arquivo etl_script.py**
 
 O script realiza três etapas principais:
