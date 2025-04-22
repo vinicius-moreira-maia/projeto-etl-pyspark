@@ -12,13 +12,19 @@
   - [4. Arquivo etl_script.py](#4-arquivo-etl_scriptpy)
 - [Pontos de Melhoria](#pontos-de-melhoria)
 
+---
+
 ## Arquitetura
 
 ![Diagrama da Arquitetura PySpark ETL](imgs/arch.png)
 
+---
+
 ## Descrição
 
 Este projeto implementa um pipeline ETL (Extract, Transform, Load) utilizando PySpark para processar dados de táxis de Nova York. Os dados são baixados de uma fonte remota, processados em um cluster Spark local e carregados em um banco de dados PostgreSQL.
+
+---
 
 ## Ferramentas Utilizadas
 
@@ -28,12 +34,22 @@ Este projeto implementa um pipeline ETL (Extract, Transform, Load) utilizando Py
 - **PySpark** - Framework para processamento distribuído
 - **Shell Script** - Para automação de tarefas
 
+---
+
 ## Sobre o Projeto
 
 ### Pré-requisitos
-Foi necessário instalar Java (11.0.2) e Spark (3.3.2), além de configurar as variáveis de ambiente no arquivo `.bashrc`. Para conexão com o PostgreSQL, utilizou-se o driver JDBC.
 
-![Variáveis de Ambiente Configuradas](imgs/envvars.jpg)
+Foi necessário instalar o Java (11.0.2) e o Apache Spark (3.3.2), além de configurar as variáveis de ambiente no arquivo `.bashrc`. 
+
+Também foi feito o download do driver JDBC do PostgreSQL, compatível com a versão do Java, disponível em:  
+[https://jdbc.postgresql.org/download/](https://jdbc.postgresql.org/download/)
+
+O driver foi colocado na pasta `jars` do Spark.
+
+![Variáveis de Ambiente](imgs/envvars.jpg)
+
+---
 
 ### **1. Arquivo start_cluster.sh**
 
@@ -43,10 +59,14 @@ Script que automatiza a inicialização de um cluster Spark local com um master 
 2. Extração da URL do master a partir dos logs
 3. Inicialização do worker conectado ao master
 
+Cluster sendo implantado.
 ![Cluster sendo implantado](imgs/image-3.png)
+
+GUI do endereço do master.
 ![Cluster implantado com um worker](imgs/image-4.png)
 
-O arquivo é bem autoexplicativo, e a única complexidade dele está neste trecho:
+O arquivo é bem autoexplicativo, e a única complexidade dele está neste trecho, onde é feita a extração da URL
+a partir dos arquivos de log do Spark, contidos na pasta de instalação:
 
 ```bash
 # 'ls -t' lista os arquivos de log a partir das datas de modificação, da mais recente pra mais antiga
@@ -87,6 +107,7 @@ echo "parando master..."
 echo "cluster encerrado"
 ```
 
+Output do script de parada.
 ![Saída do script de parada](imgs/image-5.png)
 
 ### **3. Arquivo docker-compose.yml**
@@ -97,9 +118,14 @@ Configuração dos serviços PostgreSQL e PgAdmin com persistência de dados em 
 - PgAdmin: [http://localhost:5000](http://localhost:5000)
 - PostgreSQL: `localhost:5432`
 
-![Serviços em execução](imgs/image.png)
-![Acesso ao banco de dados](imgs/image-1.png)
-![Nome do serviço no PgAdmin](imgs/image-2.png)
+PgAdmin implantado.
+![PgAdmin](imgs/image.png)
+
+O host do banco de dados é o nome do serviço definido no arquivo `docker-compose.yml`.
+![Host do banco de dados](imgs/image-1.png)
+
+Nome do serviço no arquivo `docker-compose.yml`.
+![Nome do serviço](imgs/image-2.png)
 
 ### **4. Arquivo etl_script.py**
 
@@ -127,19 +153,19 @@ df = spark.read \
          .parquet(f'data/raw/{taxi_type}/{year}/*')
 ```
 
-3. **Carga no banco**: Insere os dados no PostgreSQL de forma particionada e em lotes.
+3. **Carga no banco**: Insere os dados no PostgreSQL de forma particionada e em lotes de 10000 registros, para evitar sobrecarga de memória.
 
 ```python
 def ingest_on_postgres(df, table, user, pwd, db):
     '''
-    Recebe o dataframe com os dados lidos dos arquivos .parquet e os dados da conexão ao banco de dados,
+    Recebe o dataframe com os dados lidos dos arquivos .parquet e os dados da conexão ao banco de dados
     para realizar a ingestão. 
     '''
 ...
 ```
 
 O job é submetido ao cluster Spark através do comando `spark-submit` com parâmetros configuráveis.
-A parametrização do script foi conseguida através da biblioteca argparse, do Python.
+A parametrização foi conseguida através da biblioteca `argparse`, do Python.
 
 ```bash
 MASTER_URL="spark://Vinicius.:7077"
@@ -155,9 +181,17 @@ spark-submit \
 ```
 
 **Resultados:**
+
+Job em execução.
 ![Job em execução](imgs/image-6.png)
+
+Job finalizado.
 ![Job finalizado](imgs/image-7.png)
+
+Registros inseridos.
 ![Registros inseridos](imgs/image-8.png)
+
+---
 
 ## Pontos de Melhoria
 
@@ -169,10 +203,4 @@ spark-submit \
 
 3. **Tratamento de Dados**  
    Implementar transformações para enriquecer a qualidade dos dados para análise OLAP.
-
-4. **Monitoramento**  
-   Adicionar métricas e logs detalhados para acompanhamento do pipeline.
-
-5. **Testes Automatizados**  
-   Implementar testes unitários e de integração para garantir a qualidade do código.
 
