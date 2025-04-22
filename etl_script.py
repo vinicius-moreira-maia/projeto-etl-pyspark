@@ -28,7 +28,6 @@ def main():
     
     download_parquets(taxi_type, year)
     
-    # cada worker (4) possui apenas 1 core, portanto só posso ter 4 tarefas simultâneas
     df = spark.read \
          .parquet(f'data/raw/{taxi_type}/{year}/*')
          
