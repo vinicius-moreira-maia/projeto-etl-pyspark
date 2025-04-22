@@ -175,4 +175,3 @@ spark-submit \
 
 5. **Testes Automatizados**  
    Implementar testes unitários e de integração para garantir a qualidade do código.
-

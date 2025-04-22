@@ -1,7 +1,4 @@
-import pyspark
 from pyspark.sql import SparkSession
-from pyspark.sql import functions as F
-from pyspark.sql import types
 import os
 import requests
 import argparse
@@ -29,7 +26,7 @@ def main():
     .appName('etl-taxi-data') \
     .getOrCreate()
     
-    #download_parquets(taxi_type, year)
+    download_parquets(taxi_type, year)
     
     # cada worker (4) possui apenas 1 core, portanto só posso ter 4 tarefas simultâneas
     df = spark.read \
@@ -38,7 +35,13 @@ def main():
     ingest_on_postgres(df, db_table, db_user, db_pwd, db_name)
     
 
-def download_parquets(taxi_type, year):
+def download_parquets(taxi_type: str, year: str) -> None:
+    '''
+    Recebe o tipo do taxi (green ou yellow) e o ano do dataset. 
+    Monta as url's de acordo com os inputs recebidos. 
+    Requisita os dados de todos os meses em que houve registros e escreve em arquivos .parquet.
+    '''
+    
     url_prefix = "https://d37ci6vzurychx.cloudfront.net/trip-data/"
 
     for month in range(1, 13):
@@ -55,13 +58,18 @@ def download_parquets(taxi_type, year):
         
         try:
             response = requests.get(url)
-            response.raise_for_status()  # Lança erro se status != 200
+            response.raise_for_status()  # lança erro se o status não for 200
             with open(local_path, "wb") as f:
                 f.write(response.content)
         except requests.exceptions.RequestException as e:
             print(f"Erro ao baixar {url}: {e}")
 
 def ingest_on_postgres(df, table, user, pwd, db):
+    '''
+    Recebe o dataframe com os dados lidos dos arquivos .parquet e os dados da conexão ao banco de dados,
+    para realizar a ingestão. 
+    '''
+    
     try:
         df.write.mode("append") \
         .format("jdbc") \
