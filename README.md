@@ -107,10 +107,6 @@ echo "parando master..."
 echo "cluster encerrado"
 ```
 
-Output do script de parada.
-
-![Saída do script de parada](imgs/image-5.png)
-
 ### **3. Arquivo docker-compose.yml**
 
 Configuração dos serviços PostgreSQL e PgAdmin com persistência de dados em volumes locais.
@@ -189,7 +185,6 @@ Job em execução.
 Job finalizado.
 ![Job finalizado](imgs/image-7.png)
 
-Registros inseridos.
 ![Registros inseridos](imgs/image-8.png)
 
 ---
